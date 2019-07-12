@@ -59,26 +59,27 @@ export default class View extends Component {
                     method: 'delete'
                 })
                 .then(response => response.json())
-                .then(json => console.log(json)) 
+                .then(json => {
+                        console.log(json)
+                        Swal.fire({
+                            title: 'Deleted!',
+                            text: 'Your Task has been deleted.',
+                            type: 'success'
+                        }) 
+                        let dataUpdate = data.filter(task => task.id !== id);
+                        this.setState({data:dataUpdate});
+                    }
+                ) 
                 .catch(error => { 
                     console.log(error)
                     Swal.fire(
                         {
                           type: 'error',
                           title:'Opps!!',
-                          text: 'Tasks cant load please Check your internet Connection'
+                          text: 'This Task Cant Be Delete Please Check Your Internet Connection'
                         }
                       )
                 } );
-                
-                let dataUpdate = data.filter(task => task.id !== id);
-                this.setState({data:dataUpdate});
-
-                Swal.fire({
-                    title: 'Deleted!',
-                    text: 'Your Task has been deleted.',
-                    type: 'success'
-                }) 
             }
             else if (result.dismiss === Swal.DismissReason.cancel) {
                 Swal.fire(
@@ -111,8 +112,8 @@ export default class View extends Component {
                                         <td>{data.category}</td>
                                         <td>{data.startTime}</td>                 
                                         <td>{data.endTime}</td>
-                                       <td onClick={(e,id = data.id) => this.handleClick(e,id)}>
-                                           <a class="task-btn-delete" ><span>Delete</span><i class="os-icon os-icon-ui-15"></i></a>
+                                        <td onClick={(e,id = data.id) => this.handleClick(e,id)}>
+                                            <a class="badge badge-danger" href="#">Delete<i class="os-icon os-icon-ui-15"></i></a>
                                         </td>
                                        
                                    </tr>

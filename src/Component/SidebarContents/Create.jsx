@@ -49,7 +49,7 @@ export default class Create extends Component {
             })
             .then(response => response.json())
             .then(json => {
-              console.log(json);
+              console.log(json.message);
               Swal.fire(
                 {
                   type: 'success',
@@ -59,7 +59,7 @@ export default class Create extends Component {
               );
             }) //console.log('Success:', JSON.stringify(response))
             .catch(error => {
-              console.log(error)
+              console.log(error.error)
               Swal.fire(
                 {
                   type: 'error',
@@ -67,8 +67,8 @@ export default class Create extends Component {
                   text: 'Something Whent Wrong'
                 }
               )
-              this.setState({btndisabled:false});
             });
+             this.setState({btndisabled:false});
           }
           else
           {
@@ -118,9 +118,9 @@ export default class Create extends Component {
                                             className='form-control form-control-md'
                                             placeholder='Category'
                                             value={category}>
-                                                <option value='1'>Schools</option>
-                                                <option value='2'>Chilling</option>
-                                                <option value='3'>Work</option>
+                                                <option value='1'>Work</option>
+                                                <option value='2'>School</option>
+                                                <option value='3'>Leisure</option>
                                             </select>
                                     </div>
                                     <div className='form-group'>
