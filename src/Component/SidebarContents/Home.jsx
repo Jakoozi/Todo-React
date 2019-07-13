@@ -63,7 +63,16 @@ class HomeComponent extends React.Component{
             fetch(url)
             .then(response => response.json())
             .then(json => this.addDataToState(json)) 
-            .catch(error => console.log(error));  
+            .catch(error => { 
+                console.log(error)
+                Swal.fire(
+                    {
+                      type: 'error',
+                      title:'Sorry1!',
+                      text: 'Tasks cant load please Check your internet Connection'
+                    }
+                  )
+            } );  
     }
 
     handleClick = (e,id) => {
@@ -92,8 +101,8 @@ class HomeComponent extends React.Component{
                     Swal.fire(
                         {
                           type: 'error',
-                          title:'Opps!!',
-                          text: 'Tasks cant load please Check your internet Connection'
+                          title:'Sorry!!',
+                          text: 'Tasks cant be loaded please Check your internet Connection'
                         }
                       )
                 } );
@@ -103,14 +112,14 @@ class HomeComponent extends React.Component{
 
                 Swal.fire({
                     title: 'Deleted!',
-                    text: 'Your imaginary file has been deleted.',
+                    text: 'Your Task Has been deleted.',
                     type: 'success'
                 }) 
             }
             else if (result.dismiss === Swal.DismissReason.cancel) {
                 Swal.fire(
-                    'Cancelled',
-                    'Your Task is safe :)',
+                    'Cancelled!!',
+                    'Your Task is safe.',
                     'error'
                   )
             }
@@ -164,7 +173,7 @@ class HomeComponent extends React.Component{
             }
             else if(task.statusReturner === 6)
             {
-                completed.push(task);
+                skipped.push(task);
             }
             
         });
@@ -215,7 +224,7 @@ class HomeComponent extends React.Component{
         let slicedworkscheduled = workscheduled.slice(0,4);
        
 
-        this.setState({scheduled:scheduled ,unscheduled:unscheduled, pending:slicedpending, ongoing:slicedongoing, ongoing:slicedcompleted, skipped:slicedskipped, schoolunscheduled:slicedschoolunscheduled, chillingunscheduled:slicedchillingunscheduled, workunscheduled:slicedworkunscheduled, schoolscheduled:slicedschoolscheduled, chillingscheduled:slicedchillingscheduled, workscheduled:slicedworkscheduled});
+        this.setState({scheduled:scheduled ,unscheduled:unscheduled, pending:slicedpending, ongoing:slicedongoing, completed:slicedcompleted, skipped:slicedskipped, schoolunscheduled:slicedschoolunscheduled, chillingunscheduled:slicedchillingunscheduled, workunscheduled:slicedworkunscheduled, schoolscheduled:slicedschoolscheduled, chillingscheduled:slicedchillingscheduled, workscheduled:slicedworkscheduled});
         // console.log(this.state);
     }
 
@@ -253,6 +262,71 @@ class HomeComponent extends React.Component{
         }  
     } 
 
+    handleAcceptedClick(e,id){
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You Want To Accept Thiis Task!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Accept!',
+            cancelButtonText: 'No, keep it!'
+          })
+          .then((result) => {
+            if (result.value) {
+                let pending = this.state.pending;
+                let url = `http://localhost:5000/api/todo/${id}`;
+        
+                fetch(url,{
+                    method: 'Put'
+                })
+                .then(response => response.json())
+                .then(json => {
+                        console.log(json);
+                        Swal.fire({
+                            title: 'Accepted!',
+                            text: 'Your Task is Currently Ongoing.',
+                            type: 'success'
+                        }) 
+                        let accepted = pending.filter(task => task.id !== id);
+                        this.setState({pending:accepted});
+                    }
+                ) 
+                .catch(error => { 
+                    console.log(error)
+                    Swal.fire(
+                        {
+                          type: 'error',
+                          title:'Opps!!',
+                          text: 'This Task Cant Be Acceptedd Please Check Your Internet Connection'
+                        }
+                      )
+                } );
+                
+               
+
+            }
+            else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled',
+                    'Your Task is still Pending ',
+                    'error'
+                  )
+            }
+          }
+        )
+    }
+    handleDeclinedClick = (e,id) =>{
+        Swal.fire({
+            title: 'Declined!',
+            text: 'Your Task Has Been Declined Successfully.',
+            type: 'success'
+        }) 
+        let pending = this.state.pending;
+        let declined = pending.filter(task => task.id != id);
+        this.setState({pending:declined});
+    }
+
+
 
 
 
@@ -281,7 +355,16 @@ class HomeComponent extends React.Component{
         let unwork =  workunscheduled.map(task => 
             {
                 return(
-                        <li className="warning">{task.name}</li>
+                    <li className="warning">{task.name}
+                    <div class="todo-task">
+                        <span>
+                            <a class="badge badge-warning" onClick={(e,id = task.id) => this.handleClick(e,id)}>
+                                Delete
+                                <i class="os-icon os-icon-ui-15"></i>
+                            </a>
+                        </span>
+                    </div>
+                </li>
                 );
             }
         );
@@ -289,7 +372,16 @@ class HomeComponent extends React.Component{
         let unschool =  schoolunscheduled.map(task => 
             {
                 return(
-                        <li className="warning">{task.name}</li>
+                    <li className="warning">{task.name}
+                    <div class="todo-task">
+                        <span>
+                            <a class="badge badge-warning" onClick={(e,id = task.id) => this.handleClick(e,id)}>
+                                Delete
+                                <i class="os-icon os-icon-ui-15"></i>
+                            </a>
+                        </span>
+                    </div>
+                </li>
                 );
             }
         );
@@ -374,6 +466,12 @@ class HomeComponent extends React.Component{
                         <div class="todo-task">
                             <span contenteditable="true">{task.name}</span>
                             <div class="todo-task-buttons">
+                                <a class="badge badge-success" href="#" onClick={(e,id = pending.id) => this.handleAcceptedClick(e,id)}>
+                                    Accept
+                                </a>
+                                <a class="badge badge-warning" href="#"  onClick={(e,id = pending.id) => this.handleDeclinedClick(e,id)}>
+                                    Decline
+                                </a>
                                 <a class="task-btn-delete" onClick={(e,id = task.id) => this.handleClick(e,id)} >
                                     <span>Delete</span>
                                     <i class="os-icon os-icon-ui-15"></i>
@@ -409,18 +507,14 @@ class HomeComponent extends React.Component{
         let completedrender = completed.map(task =>
             {
                 return(
-                    <li class="draggable-task success">
-                        <div class="todo-task-drag drag-handle">
-                            <i class="os-icon os-icon-hamburger-menu-2 drag-handle"></i>
-                        </div>
+                    <li className="success">{task.name}
                         <div class="todo-task">
-                            <span contenteditable="true"><strong>{task.name}</strong></span>
-                            <div class="todo-task-buttons">
-                                <a class="task-btn-delete" onClick={(e,id = task.id) => this.handleClick(e,id)} >
-                                    <span>Delete</span>
+                            <span>
+                                <a class="badge badge-success" onClick={(e,id = task.id) => this.handleClick(e,id)}>
+                                    Delete
                                     <i class="os-icon os-icon-ui-15"></i>
                                 </a>
-                            </div>
+                            </span>
                         </div>
                     </li>
                 );

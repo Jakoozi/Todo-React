@@ -32,8 +32,8 @@ export default class Notification extends Component {
                 Swal.fire(
                     {
                       type: 'error',
-                      title:'Opps!!',
-                      text: 'Tasks cant load please Check your internet Connection'
+                      title:'Sorry!!',
+                      text: 'Tasks cant be loaded please Check your internet Connection'
                     }
                   )
             } );
@@ -114,7 +114,7 @@ export default class Notification extends Component {
             }
             else if (result.dismiss === Swal.DismissReason.cancel) {
                 Swal.fire(
-                    'Cancelled',
+                    'Cancelled!!',
                     'Your Task is safe ',
                     'error'
                   )
@@ -277,7 +277,7 @@ export default class Notification extends Component {
         }
         else
         {
-            pend = <h3>Loading...</h3>
+            pend = <h6>Loading...</h6>
         }
 
         if(loaded === true)
@@ -304,7 +304,7 @@ export default class Notification extends Component {
         }
         else
         {
-            complete = <h3>Loading...</h3>
+            complete = <h6>Loading...</h6>
         }
 
         if(loaded === true)
@@ -333,7 +333,7 @@ export default class Notification extends Component {
         }
         else
         {
-            skip = <h3>Loading...</h3>
+            skip = <h6>Loading...</h6>
         }
         
         // <td onClick={(e,id = data.id) => this.handleClick(e,id)}>
@@ -349,13 +349,13 @@ export default class Notification extends Component {
                                     <h4 class="element-header">This Are Your Pending Tasks</h4>
                                     <table class="table table-padded">
                                         <thead>
-                                        <tr>
-                                            <th>Name</th>
-                                            <th>Category</th>
-                                            <th>Start Time</th>
-                                            <th class="text-center">End Time</th>
-                                            <th>Accept/Dcline Tasks</th>
-                                        </tr>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th>Start Time</th>
+                                                <th class="text-center">End Time</th>
+                                                <th>Accept/Dcline Tasks</th>
+                                            </tr>
                                         </thead>
                                         {pend}
                                     </table>
@@ -364,13 +364,13 @@ export default class Notification extends Component {
                                     <h4 class="element-header">This Are Your Completed Tasks</h4>
                                     <table class="table table-padded">
                                         <thead>
-                                        <tr>
-                                        <th>Name</th>
-                                            <th>Category</th>
-                                            <th>Start Time</th>
-                                            <th class="text-center">End Time</th>
-                                            <th>Accept/Dcline Tasks</th>
-                                        </tr>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th>Start Time</th>
+                                                <th class="text-center">End Time</th>
+                                                <th>Accept/Dcline Tasks</th>
+                                            </tr>
                                         </thead>
                                         {complete}
                                     </table>
@@ -379,13 +379,13 @@ export default class Notification extends Component {
                                     <h4 class="element-header">This Are Your Skipped Tasks</h4>
                                     <table class="table table-padded">
                                         <thead>
-                                        <tr>
-                                        <th>Name</th>
-                                            <th>Category</th>
-                                            <th>Start Time</th>
-                                            <th class="text-center">End Time</th>
-                                            <th>Accept/Dcline Tasks</th>
-                                        </tr>
+                                            <tr>
+                                                <th>Name</th>
+                                                <th>Category</th>
+                                                <th>Start Time</th>
+                                                <th class="text-center">End Time</th>
+                                                <th>Accept/Dcline Tasks</th>
+                                            </tr>
                                         </thead>
                                         {skip}
                                     </table>

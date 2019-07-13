@@ -80,6 +80,7 @@ export default class Create extends Component {
               }
             )
          }
+         this.setState({data:{}});
        
      }
      
