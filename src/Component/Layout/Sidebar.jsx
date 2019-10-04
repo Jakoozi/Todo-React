@@ -36,7 +36,12 @@ class SidebarComponent extends React.Component{
                         <Link to="/Notification" className="nav-link">        
                             <div className="icon-w"><div className="os-icon os-icon-others-43"></div></div><span>Notification</span>
                         </Link>
-                    </li>                   
+                    </li>    
+                    <li className="sub-menu">
+                        <Link to="/Setting" className="nav-link">        
+                            <div className="icon-w"><div className="os-icon os-icon-robot-2"></div></div><span>Settings</span>
+                        </Link>
+                    </li>                       
                 </ul>
             </div>
 

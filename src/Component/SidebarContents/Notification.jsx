@@ -304,7 +304,7 @@ export default class Notification extends Component {
         }
         else
         {
-            complete = <h6>Loading...</h6>
+            complete = <h6>Loading...<i className="fa fa=cogs"></i></h6>
         }
 
         if(loaded === true)

@@ -5,6 +5,7 @@ import Create from './Component/SidebarContents/Create';
 import View from './Component/SidebarContents/View';
 import Notification from './Component/SidebarContents/Notification';
 import About from './Component/SidebarContents/About';
+import Setting from './Component/SidebarContents/Settings/Setting'
 
 function App() {
   return ( 
@@ -16,6 +17,7 @@ function App() {
             <Route exact path="/View" component={View} />
             <Route exact path="/Notification" component={Notification} />
             <Route exact path="/About" component={About} />
+            <Route exact path="/Setting" component={Setting} />
           </Switch>
         </BrowserRouter>
     </div>
