@@ -19,7 +19,7 @@ class SidebarComponent extends React.Component{
                 <ul className="main-menu">
                     <li className="sub-menu">
                         <Link to="/" className="nav-link">        
-                            <div className="icon-w"><div className="os-icon os-icon-window-content"></div></div><span>Home</span>
+                            <div className="icon-w"><div className="os-icon os-icon-window-content"></div></div><span>Dashboard</span>
                         </Link>
                     </li>
                     <li className="sub-menu">

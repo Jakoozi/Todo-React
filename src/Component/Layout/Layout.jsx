@@ -10,7 +10,7 @@ class LayoutComponent extends React.Component {
                         <div className='desktop-menu menu-side-w menu-activated-on-click color-scheme-dark'>
                             <Sidebar />
                         </div>
-                        <div className='content-w'>
+                        <div className='content-w '>
                             <div
                                 className='with-content-panel'
                                 style={{ minHeight: '120vh' }}>

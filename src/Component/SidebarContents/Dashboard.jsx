@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
 
 
-class HomeComponent extends React.Component{
+class Dashboard extends React.Component{
 
     state= {
         data:[
@@ -938,7 +938,7 @@ class HomeComponent extends React.Component{
     }
 }
 
-export default HomeComponent;
+export default Dashboard;
 
                                    
                                 

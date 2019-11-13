@@ -23,8 +23,10 @@ export default class Create extends Component {
         let value = e.target.value;
       let data =  {...this.state.data};
           data[name] = value;
-      
+          console.log(data)
+
         this.setState({data});
+        
       }
       onSubmit = e => {
         

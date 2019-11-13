@@ -9,20 +9,41 @@ export default class Setting extends Component {
             <Layout>
            
                 <ul className="breadcrumb">
-                    <li className="breadcrumb-item"><Link to="/" className="nav-link">Home</Link></li>
-                    <li className="breadcrumb-item"><Link to="/Create" className="nav-link">Create</Link></li>
-                    <li className="breadcrumb-item"><Link to="/View" className="nav-link">Tasks</Link></li>     
+
+                    <li className="breadcrumb-item"><Link to="/Dashboard" >Dashboard</Link></li>
+                    <li className="breadcrumb-item"><Link to="/" >Login</Link></li>
+                    <li className="breadcrumb-item"><Link to="/Register" >Register</Link></li>
+                    {/* <li className="breadcrumb-item"><Link to="/Create" >Create</Link></li>
+                    <li className="breadcrumb-item"><Link to="/View" >Tasks</Link></li>      */}
                 </ul>
-                <div class="floated-colors-btn second-floated-btn">
-                    <div class="os-toggler-w">
-                        <div class="os-toggler-i">
-                            <div class="os-toggler-pill"></div>
+                <div className="content-i">
+                    <div className="content-box">
+                        <div className="element-wrapper">
+                            <div className="element-box" style={{ minHeight: '70vh' }}>
+                                <h4 className="form-header">
+                                    Edit Settings
+                                </h4>
+                                <div class="form-desc">Change your app settings here.</div>
+                                <div className="form-body">
+                                        <div className="form-group"><div className="os-icon os-icon-pie-chart-2"><span>Your Activit</span></div></div>
+                                </div> 
+                            </div>
+                            <div class="floated-colors-btn second-floated-btn"> 
+                                <div class="os-toggler-w">
+                                    <div class="os-toggler-i">
+                                        <div class="os-toggler-pill"></div>
+                                    </div>
+                                </div>
+                                <span>Dark </span>
+                                <span>Colors</span>
+                            </div>
                         </div>
                     </div>
-                    <span>Dark </span>
-                    <span>Colors</span>
                 </div>
-                <div className=""></div>
+                
+               
+                
+                        
             </Layout>
         )
     }
