@@ -691,36 +691,7 @@ class Dashboard extends React.Component{
                                                 </ul>
                                             }
                                             {/*ul 1 starts */}
-                                            {/* <ul class="tasks-list">
-                                                <li class="draggable-task danger">
-                                                    <div class="todo-task-drag drag-handle">
-                                                        <i class="os-icon os-icon-hamburger-menu-2 drag-handle"></i>
-                                                    </div>
-                                                    <div class="todo-task">
-                                                        <span contenteditable="true">Make sure car oil level is checked</span>
-                                                        <div class="todo-task-buttons">
-                                                            <a class="task-btn-delete" href="#">
-                                                                <span>Delete</span>
-                                                                <i class="os-icon os-icon-ui-15"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="draggable-task success">
-                                                    <div class="todo-task-drag drag-handle">
-                                                        <i class="os-icon os-icon-hamburger-menu-2 drag-handle"></i>
-                                                    </div>
-                                                    <div class="todo-task">
-                                                        <span contenteditable="true">Order new set of tires from tirerack and schedule appointment</span>
-                                                        <div class="todo-task-buttons">
-                                                            <a class="task-btn-delete" href="#">
-                                                                <span>Delete</span>
-                                                                <i class="os-icon os-icon-ui-15"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul> */}
+                                            
                                             {/*ul 1 Endss */}
                                         </div>
                                     </div>
@@ -785,50 +756,7 @@ class Dashboard extends React.Component{
                                                     {ongoingrender}
                                                 </ul>
                                             }
-                                            {/* <ul class="tasks-list">
-                                                <li class="draggable-task danger">
-                                                    <div class="todo-task-drag drag-handle">
-                                                        <i class="os-icon os-icon-hamburger-menu-2 drag-handle"></i>
-                                                    </div>
-                                                    <div class="todo-task">
-                                                        <span contenteditable="true">Order new drills from amazon sale box</span>
-                                                        <div class="todo-task-buttons">
-                                                            <a class="task-btn-delete" href="#">
-                                                                <span>Delete</span>
-                                                                <i class="os-icon os-icon-ui-15"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                                <li class="draggable-task dangere">
-                                                    <div class="todo-task-drag drag-handle">
-                                                        <i class="os-icon os-icon-hamburger-menu-2 drag-handle"></i>
-                                                    </div>
-                                                    <div class="todo-task">
-                                                        <span contenteditable="true">Make sure car oil level is checked</span>
-                                                        <div class="todo-task-buttons">
-                                                            <a class="task-btn-delete" href="#">
-                                                                <span>Delete</span>
-                                                                <i class="os-icon os-icon-ui-15"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>               
-                                                <li class="draggable-task danger">
-                                                    <div class="todo-task-drag drag-handle">
-                                                        <i class="os-icon os-icon-hamburger-menu-2 drag-handle"></i>
-                                                    </div>
-                                                    <div class="todo-task">
-                                                        <span contenteditable="true">Order new set of tires from tirerack and schedule appointment</span>
-                                                        <div class="todo-task-buttons">
-                                                            <a class="task-btn-delete" href="#">
-                                                                <span>Delete</span>
-                                                                <i class="os-icon os-icon-ui-15"></i>
-                                                            </a>
-                                                        </div>
-                                                    </div>
-                                                </li>
-                                            </ul> */}
+                                         
                                             {/*ul 1 Ends */}
                                         </div>
                                     </div>

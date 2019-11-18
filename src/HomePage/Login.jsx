@@ -1,5 +1,7 @@
 import React, { Component } from 'react'
 import { Link } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
 
 // import Layout from '../../Layout/Layout';
 
@@ -8,8 +10,11 @@ export default class Login extends Component {
     state ={
         data:{
             email: "",
-            Password: "" 
-        }  
+            password: "" ,
+           
+        } ,
+        login: false,
+        disablebtn: false
     }
 
     handleInputChange = (e) =>{
@@ -18,28 +23,93 @@ export default class Login extends Component {
         let data = this.state.data;
         data[name] = value;
 
-        this.setState(this.state.data = data);
+        this.setState({data});
         console.log(this.state);
        
 
     }
 
     onSubmit = (e) => {
+         
+        e.preventDefault();
+        this.setState({  disablebtn: true})
+
         const {email, password} = this.state.data;
-        if(email && password)
+        if(email  && password )
         {
-            e.preventDefault();
+           console.log("this is the new console")
             const data = JSON.stringify(this.state.data);
             let url = 'http://localhost:5000/api/admin/login';
+            console.log(data, "console oging data");
 
-            
+            fetch(url,{
+                method: 'post',
+                body: data,
+                headers:{
+                  'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(json => {
+              console.log(json, "this is where json is console logged");
+                if(json == 1){
+                    return(this.setState({login: true}))
+                }
+                else if(json == 2){
+                    Swal.fire(
+                        {
+                        type: 'warning',
+                        title:'Sorry!!',
+                        text: 'Password is Incorrect.'
+                        }
+                    )
+                }
+                else if(json == 3) {
+                    Swal.fire(
+                        {
+                        type: 'warning',
+                        title:'Sorry!!',
+                        text: 'User Doesnt Exist.'
+                        }
+                    )
+                }
+            })
+            .catch(error => { 
+                
+                console.log(error, "error is consoled")
+                Swal.fire(
+                  {
+                    type: 'error',
+                    title:'Opps!!',
+                    text: 'Something Whent Wrong Please Check Your Internet Connection.'
+                  }
+                )
+            });
         }
+        else
+          {
+            Swal.fire(
+              {
+                type: 'warning',
+                title:'Please!',
+                text: 'Please Fill The Form Completely'
+              }
+            )
+         }
+         this.setState({disablebtn:false, data:{}});
     }
 
 
     render() {
 
-        const {email, password} = this.state.data;
+        const {email, password,} = this.state.data;
+        const {disablebtn} = this.state;
+
+        console.log(disablebtn)
+        if (this.state.login){
+            this.props.history.push('/Dashboard')
+        }
+
         return (
             <div className='with-content-panel'>
                 <div className='all-wrapper menu-side with-side-panel'>
@@ -81,16 +151,18 @@ export default class Login extends Component {
                                                             <div class="form-group">
                                                                 <label for="pwd">Password:</label>
                                                                 <input type="password" 
-                                                                onChange={this.handleINputChange}
+                                                                onChange={this.handleInputChange}
                                                                 name='password'
                                                                 value={password}
                                                                 class="form-control" 
                                                                 id="pwd" />
                                                             </div>
-                                                            <div class="checkbox">
-                                                                <label><input type="checkbox" /> Remember me</label>
-                                                            </div>
-                                                            <button type="submit" className="btn btn-primary">Login</button>
+                                                            <button type="submit"
+                                                            disabled={disablebtn}
+                                                            className="btn btn-primary">
+                                                                Login
+                                                            </button>
+                                                            <div class="tipWrap"><p class="tip">Don't have an account? <Link to="/Register" class="">Sign up here</Link></p></div>
                                                     </form>
                                                 </div>
                                             </div>

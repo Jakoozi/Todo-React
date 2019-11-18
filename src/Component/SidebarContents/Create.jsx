@@ -30,18 +30,18 @@ export default class Create extends Component {
       }
       onSubmit = e => {
         
-       
-        console.log(this.state.data);
+        this.setState({btndisabled:true});
+        console.log(this.state);
         let { name, category, startTime, endTime } = this.state.data;
           if (name && category && startTime && endTime)                                  
           { 
            
-            this.setState({btndisabled:true});
+            
 
             e.preventDefault();
             const data = JSON.stringify(this.state.data);
             let url = 'http://localhost:5000/api/todo';
-    
+    console.log("this is before making api call")
             fetch(url,{
               method: 'post',
               body: data,
@@ -70,7 +70,7 @@ export default class Create extends Component {
                 }
               )
             });
-             this.setState({btndisabled:false});
+             
           }
           else
           {
@@ -83,7 +83,7 @@ export default class Create extends Component {
             )
          }
          this.setState({data:{}});
-       
+         this.setState({btndisabled:false});
      }
      
     
@@ -102,6 +102,7 @@ export default class Create extends Component {
                                 
                                     <div className='form-group'>
                                         <label htmlfor='name'>Name</label>
+                                        {/* <label>Name</label> */}
                                             <input
                                             onChange={this.handleInputChange}
                                             type='text'
@@ -114,16 +115,14 @@ export default class Create extends Component {
                                     <div className='form-group'>
                                         <label htmlfor='Sel1'>Category</label>
                                             <select
-                                            class='form-control'
-                                            id='sel1'
                                             name='category'
                                             onChange={this.handleInputChange}
                                             className='form-control form-control-md'
-                                            placeholder='Category'
                                             value={category}>
-                                                <option value='1'>Work</option>
-                                                <option value='2'>School</option>
-                                                <option value='3'>Leisure</option>
+                                              <option hidden >Please Select</option>
+                                              <option value='1'>Work</option>
+                                              <option value='2'>School</option>
+                                              <option value='3'>Leisure</option>
                                             </select>
                                     </div>
                                     <div className='form-group'>
@@ -152,7 +151,7 @@ export default class Create extends Component {
                                     <p>   
                                     <button 
                                           type='submit' 
-                                          disabled={btndisabled}
+                                          // disabled={btndisabled}
                                           className='btn btn-light btn-block btn-success'>
                                             create Task
                                           </button>

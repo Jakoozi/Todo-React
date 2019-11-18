@@ -10,16 +10,14 @@ export default class RegisterPage extends Component {
             password: '',
             confirmpassword: '',
         },
-        data2: {
-          Email: "",
-          password: "",
-                },
-        btndisabled: false,
+        
         success: false,
-        failed:true
+        btndisabled: false,
+        failed:true,
+        login: false
         
       }
-
+//in charge of storing form input to the state
       handleInputChange = (e) => {
         let name = e.target.name;
         let value = e.target.value;
@@ -30,67 +28,95 @@ export default class RegisterPage extends Component {
         this.setState({data});
       }
 
+      //this is my submit method
       onSubmit = e => {
-        e.preventDefault();
 
-       
-        console.log(this.state.data);
-        let { email, password, confirmpassword } = this.state.data;
-        let data3 = this.state.data;
-        let data4 = data3.map(data =>{
-           data.sice(0,1)
-        });
-        console.log(data4);
+          
+
+          e.preventDefault();
+
+          
+          let { email, password, confirmpassword } = this.state.data;
+          let newData = {
+            email: email,
+            password: password
+          }
+        
           if (email && password && confirmpassword)                                  
           { 
 
-           
             this.setState({btndisabled:true});
-
-            const data = JSON.stringify(this.state.data);
-            let url = 'http://localhost:5000/api/admin';
-    
-            fetch(url,{
-              method: 'post',
-              body: data,
-              headers:{
-                'Content-Type': 'application/json'
-              }
-            })
-            .then(response => response.json())
-            .then(json => {
-              console.log(json.message);
-              Swal.fire(
-                {
-                  type: 'success',
-                  title: 'Account Created!!!',
-                  text: 'You Have Succefully Registered'
+            console.log(this.state.btndisabled, "Btndisable is console logged");
+            if(password === confirmpassword)
+            {
+              const data = JSON.stringify(newData);
+              let url = 'http://localhost:5000/api/admin/registeruser';
+      
+              fetch(url,{
+                method: 'post',
+                body: data,
+                headers:{
+                  'Content-Type': 'application/json'
                 }
-              );
-            }) //console.log('Success:', JSON.stringify(response))
-            .catch(error => {
-              console.log(error.error)
+              })
+              .then(response => response.json())
+              .then(json => {
+                console.log(json.message, "This is the json response");
+                if(json == true)
+                {
+                  Swal.fire(
+                    {
+                      type: 'warning',
+                      title: 'Sorry!!',
+                      text: 'User Already Exists, Please Login into Yoour Account'
+                    }
+                  );
+                }
+                else{
+                  Swal.fire(
+                    {
+                      type: 'success',
+                      title: 'Account Created!!!',
+                      text: 'You Have Succefully Registered'
+                    }
+                  );
+                  return(this.setState({login: true}))
+                }
+               
+              }) 
+              .catch(error => {
+                console.log(error)
+                Swal.fire(
+                  {
+                    type: 'error',
+                    title:'Sorry!!',
+                    text: 'Please Something Whent Wrong, Check Your Internet Connection.'
+                  }
+                )
+              });
+              
+            }
+            else{
               Swal.fire(
                 {
                   type: 'error',
-                  title:'Opps!!',
-                  text: 'Something Whent Wrong'
+                  title:'Sorry!',
+                  text: 'Password and Confirmpassword do not Match, Please Make Sure it is The Same'
                 }
               )
-            });
-             this.setState({btndisabled:false});
+            }
           }
           else
           {
-            Swal.fire(
-              {
-                type: 'warning',
-                title:'Please!',
-                text: 'Fill In Your Correct Information'
-              }
-            )
-         }
-         this.setState({data:{}});
+              Swal.fire(
+                {
+                  type: 'warning',
+                  title:'Please!',
+                  text: 'Fill In Your Correct Information'
+                }
+              )
+          }
+          this.setState({data:{}, btndisabled:false});
        
      }
 
@@ -99,6 +125,9 @@ export default class RegisterPage extends Component {
 
         const { email, password, confirmpassword } = this.state.data
         let btndisabled = this.state.btndisabled;
+        if(this.state.login){
+          this.props.history.push('/Dashboard')
+        }
 
         return (
             <div className='content-w '>
@@ -132,6 +161,7 @@ export default class RegisterPage extends Component {
                                                      class="form-control"
                                                      value={email}
                                                      name='email'
+                                                     onfocus="this.value=''"
                                                      id="email" />
                                                 </div>
                                                 <div class="form-group">
@@ -152,13 +182,11 @@ export default class RegisterPage extends Component {
                                                     name='confirmpassword'
                                                     id="cpwd" />
                                                 </div>
-                                                <div class="checkbox">
-                                                    <label><input type="checkbox" /> Remember me</label>
-                                                </div>
                                                 <button type="submit" 
                                                 disabled={btndisabled}
                                                 className="btn btn-danger">Register
                                                 </button>
+                                                <div class="tipWrap"><p class="tip">Already Have an Account? <Link to="/" class="">Login here</Link></p></div>
                                         </form>
                                     </div>
                                 </div>
@@ -172,3 +200,5 @@ export default class RegisterPage extends Component {
         )
     }
 }
+
+{/* <p class="tip">Already have an account? <a href="/login" class="">Login here</a>.</p> */}
