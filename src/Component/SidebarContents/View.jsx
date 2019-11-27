@@ -35,12 +35,11 @@ export default class View extends Component {
 
     addDataToState = (data) => {
         this.setState({data,loaded:true});
-        console.log(this.state);
     }
 
 
     handleClick = (e,id) => {
-        //Not tested
+        //This is the delete button
         
         Swal.fire({
             title: 'Are you sure?',
@@ -95,7 +94,43 @@ export default class View extends Component {
             
     }
    
-
+    statusReturnerMethod = (status) =>{
+        switch (status) {
+            case 1:
+              status = `Scheduled`;
+              break;
+            case 2:
+              status = `Unscheduled`;
+              break;
+            case 3:
+              status = `Pending`;
+              break;
+            case 4:
+              status = `Ongoing`;
+              break;
+            case 5:
+                status = `Completed`;
+                break;
+            case 6:
+                status = `Skipped`;
+                break;
+          }
+          return status;
+    }
+    categoryReturnMethod = (category) =>{
+        switch (category) {
+            case 1:
+              category = `School`;
+              break;
+            case 2:
+              category = `Liesure`;
+              break;
+            case 3:
+              category = `Work`;
+              break;
+          }
+          return category;
+    }
 
     render() {
         let all;
@@ -104,12 +139,15 @@ export default class View extends Component {
         if(loaded === true)
         {
             all = data.map(data => {
+                
                 return (
+
                 
                                 <tbody>
                                     <tr role="row" class="odd">
                                         <td class="sorting_1">{data.name}</td>
-                                        <td>{data.category}</td>
+                                        <td>{this.statusReturnerMethod(data.statusReturner)}</td>
+                                        <td>{this.categoryReturnMethod(data.category)}</td>
                                         <td>{data.startTime}</td>                 
                                         <td>{data.endTime}</td>
                                         <td onClick={(e,id = data.id) => this.handleClick(e,id)}>
@@ -141,11 +179,15 @@ export default class View extends Component {
                                         {/* <div id="dataTable1_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4"> */}
                                             <div class="row">
                                                 <div class="col-sm-12">
-                                                    <table id="dataTable1" width="100%" class="table table-striped table-lightfont dataTable" role="grid" aria-describedby="dataTable1_info"  style={{width: '100%'}}>
+                                                {/* id="dataTable1   this is the table id" */}
+                                                    <table  width="100%" class="table table-striped table-lightfont dataTable" role="grid" aria-describedby="dataTable1_info"  style={{width: '100%'}}>
                                                         <thead>
                                                                     <tr role="row">
                                                                         <th class="sorting_asc" tabindex="0" aria-controls="dataTable1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending"  style={{width: '280px'}}>
                                                                             Task
+                                                                        </th>
+                                                                        <th class="sorting_asc" tabindex="0" aria-controls="dataTable1" rowspan="1" colspan="1"             aria-sort="ascending" aria-label="Name: activate to sort column descending"  style={{width: '280px'}}>
+                                                                            Status
                                                                         </th>
                                                                             <th class="sorting" tabindex="0" aria-controls="dataTable1" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending"  style={{width: '280px'}}>
                                                                                 Category

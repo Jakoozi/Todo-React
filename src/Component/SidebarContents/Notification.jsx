@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import Layout from '../Layout/Layout';
 import Swal from 'sweetalert2';
+import {Accept, dataReciever} from './Accept';
 
 
 export default class Notification extends Component {
@@ -41,11 +42,15 @@ export default class Notification extends Component {
     }
 
     addDataToState = (data) => {
+
         let pendingtasks = [];
         let completedtasks = [];
         let skippedtasks = []
 
-        data.map(task => 
+        this.setState({data});
+        console.log(this.state.data, `state's data in the addDataToState method`);
+
+        this.state.data.map(task => 
             {
                 if(task.statusReturner == 3)
                 {
@@ -177,10 +182,11 @@ export default class Notification extends Component {
           }
         )
     }
+    //this is the button that accepts requests
     handleAcceptedClick(e,id){
         Swal.fire({
-            title: 'Are you sure?',
-            text: 'You Want To Accept Thiis Task!',
+            title:` Are you sure?`,
+            text: 'You Want To Accept This Task!',
             type: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, Accept!',
@@ -188,22 +194,20 @@ export default class Notification extends Component {
           })
           .then((result) => {
             if (result.value) {
-                let pending = this.state.pending;
-                let url = `http://localhost:5000/api/todo/${id}`;
+                let url = `http://localhost:5000/api/todo/accepttask/${id}`;
         
                 fetch(url,{
                     method: 'Put'
                 })
                 .then(response => response.json())
                 .then(json => {
-                        console.log(json);
+                        console.log(json, `This is the json respone`);
                         Swal.fire({
                             title: 'Accepted!',
                             text: 'Your Task is Currently Ongoing.',
                             type: 'success'
                         }) 
-                        let accepted = pending.filter(task => task.id !== id);
-                        this.setState({pending:accepted});
+                        this.addDataToState(json);
                     }
                 ) 
                 .catch(error => { 
@@ -224,21 +228,59 @@ export default class Notification extends Component {
                 Swal.fire(
                     'Cancelled',
                     'Your Task is still Pending ',
-                    'error'
+                    'info'
                   )
             }
           }
         )
     }
+//this button declines requests
     handleDeclinedClick = (e,id) =>{
         Swal.fire({
-            title: 'Declined!',
-            text: 'Your Task Has Been Declined Successfully.',
-            type: 'success'
-        }) 
-        let pending = this.state.pending;
-        let declined = pending.filter(task => task.id != id);
-        this.setState({pending:declined});
+            title:` Are you sure?`,
+            text: 'You Want To Accept This Task!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Accept!',
+            cancelButtonText: 'No, keep it!'
+          })
+          .then((result) => {
+            if (result.value) {
+                let url = `http://localhost:5000/api/todo/declinetask/${id}`;
+        
+                fetch(url,{
+                    method: 'Put'
+                })
+                .then(response => response.json())
+                .then(json => {
+                        console.log(json, `This is the json respone`);
+                        Swal.fire({
+                            title: 'Declined!',
+                            text: 'Your Task Has Been Declined Successfully.',
+                            type: 'success'
+                        }) 
+                        this.addDataToState(json);
+                    }
+                )
+                .catch(error => { 
+                    console.log(error)
+                    Swal.fire(
+                        {
+                          type: `error`,
+                          title:`Opps!!`,
+                          text: `This Task Can't Be Acceptedd Please Check Your Internet Connection`
+                        }
+                      )
+                } )
+            }
+            else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled',
+                    'Your Task is still Pending ',
+                    'info'
+                  )
+            }
+        });
     }
 
 
@@ -399,28 +441,3 @@ export default class Notification extends Component {
         )
     }
 }
-
-                                        //  <tbody>
-                                        //     <tr>
-                                        //         <td class="nowrap">
-                                        //             <span class="status-pill smaller yellow"></span>
-                                        //             <span>Complete</span>
-                                        //         </td>
-                                        //         <td>
-                                        //             <span class="status-pill smaller yellow"></span>
-                                        //             <span>Complete</span>
-                                        //         </td>
-                                        //         <td>
-                                        //             <span class="status-pill smaller yellow"></span>
-                                        //             <span>Complete</span>
-                                        //         </td>
-                                        //         <td>
-                                        //             <span class="status-pill smaller yellow"></span>
-                                        //             <span>Complete</span>
-                                                    
-                                        //         </td>
-                                        //         <td>
-                                        //             <a class="badge badge-primary" href="#">Shopping</a>
-                                        //         </td> 
-                                        //     </tr>
-                                        // </tbody>

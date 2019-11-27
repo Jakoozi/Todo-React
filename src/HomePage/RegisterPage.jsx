@@ -62,6 +62,8 @@ export default class RegisterPage extends Component {
               .then(response => response.json())
               .then(json => {
                 console.log(json.message, "This is the json response");
+                // here should be checking if the users object came back.
+                //it should also store that object in the state so that the id will be used to fetch his data
                 if(json == true)
                 {
                   Swal.fire(
@@ -80,6 +82,7 @@ export default class RegisterPage extends Component {
                       text: 'You Have Succefully Registered'
                     }
                   );
+                  //object should be stored to state here
                   return(this.setState({login: true}))
                 }
                

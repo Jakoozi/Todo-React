@@ -57,6 +57,7 @@ class Dashboard extends React.Component{
         item:7
     }
 
+    //this method Gets all the Tasks from the data base and sends it to the addDataToState method(IT IS WORKING)
     componentDidMount(){
         let url = 'http://localhost:5000/api/todo';
 
@@ -68,70 +69,18 @@ class Dashboard extends React.Component{
                 Swal.fire(
                     {
                       type: 'error',
-                      title:'Sorry1!',
+                      title:'Sorry!',
                       text: 'Tasks cant load please Check your internet Connection'
                     }
                   )
             } );  
     }
 
-    handleClick = (e,id) => {
-        //Not tested
-        
-        Swal.fire({
-            title: 'Are you sure?',
-            text: 'You will not be able to recover this Task again!',
-            type: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Yes, delete it!',
-            cancelButtonText: 'No, keep it'
-          })
-          .then((result) => {
-            if (result.value) {
-                let data = this.state.data;
-                let url = `http://localhost:5000/api/todo/${id}`;
-        
-                fetch(url,{
-                    method: 'delete'
-                })
-                .then(response => response.json())
-                .then(json => console.log(json)) 
-                .catch(error => { 
-                    console.log(error)
-                    Swal.fire(
-                        {
-                          type: 'error',
-                          title:'Sorry!!',
-                          text: 'Tasks cant be loaded please Check your internet Connection'
-                        }
-                      )
-                } );
 
-                let dataUpdate = data.filter(task => task.id !== id);
-                this.setState({data:dataUpdate});
-
-                Swal.fire({
-                    title: 'Deleted!',
-                    text: 'Your Task Has been deleted.',
-                    type: 'success'
-                }) 
-            }
-            else if (result.dismiss === Swal.DismissReason.cancel) {
-                Swal.fire(
-                    'Cancelled!!',
-                    'Your Task is safe.',
-                    'error'
-                  )
-            }
-          }
-        )
-                    
-                    
-            
-    }
-
+    //this is the method that sets the state to display the tasks. (it is WORKING)
     addDataToState = (data) => {
         this.setState({data,loaded:true});
+        console.log(this.state.data, `this is the state in the addDataToState method`);
 
         let scheduled = [];
         let unscheduled = [];
@@ -150,7 +99,7 @@ class Dashboard extends React.Component{
 
 
 
-        data.map((task) => {
+        this.state.data.map((task) => {
             if(task.statusReturner === 1)
             {
                 scheduled.push(task);
@@ -178,6 +127,7 @@ class Dashboard extends React.Component{
             
         });
     
+        //this is to Map/Seperate all UNSCHEDULED tasks according to there category
         unscheduled.map((task) => {
             if(task.category === 1) 
             {
@@ -194,6 +144,7 @@ class Dashboard extends React.Component{
             }
         });
 
+        //this is to map ALL SCHEDULED tasks acording to there category
         scheduled.map((task) => {
             if(task.category === 1) 
             {
@@ -210,8 +161,6 @@ class Dashboard extends React.Component{
             }
         });
        
-        // console.log(this.state);
-
         let slicedpending = pending.slice(0,4);
         let slicedongoing = ongoing.slice(0,4);
         let slicedcompleted = completed.slice(0,4);
@@ -225,12 +174,9 @@ class Dashboard extends React.Component{
        
 
         this.setState({scheduled:scheduled ,unscheduled:unscheduled, pending:slicedpending, ongoing:slicedongoing, completed:slicedcompleted, skipped:slicedskipped, schoolunscheduled:slicedschoolunscheduled, chillingunscheduled:slicedchillingunscheduled, workunscheduled:slicedworkunscheduled, schoolscheduled:slicedschoolscheduled, chillingscheduled:slicedchillingscheduled, workscheduled:slicedworkscheduled});
-        // console.log(this.state);
     }
-
-    // handleUnscheduledEvents = () => {
-    //     //this.state.unscheduled.map()
-    // }
+    
+    //(THE TWO ARE WORKING)
     daySetter = (value) => {
         switch(value){
             case 1: return 'Mon'
@@ -245,7 +191,7 @@ class Dashboard extends React.Component{
     } 
     monthSetter = (value) => {
         switch(value){
-            case 1: return 'Jan'
+            case 0: return 'Jan'
             case 1: return 'Feb'
             case 2: return 'Mar'
             case 3: return 'Apr'
@@ -256,16 +202,80 @@ class Dashboard extends React.Component{
             case 8: return 'Sep'
             case 9: return 'Oct'
             case 10: return 'Nov'
-            case 8: return 'Dec'
+            case 11: return 'Dec'
 
             default: return ''
         }  
     } 
 
-    handleAcceptedClick(e,id){
+    //This is the Delete method. (it is working )
+    handleClick = (e,id) => {
+        
         Swal.fire({
             title: 'Are you sure?',
-            text: 'You Want To Accept Thiis Task!',
+            text: 'You will not be able to recover this Task again!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, delete it!',
+            cancelButtonText: 'No, keep it'
+          })
+          .then((result) => {
+            if (result.value) {
+                let data = this.state.data;
+                let url = `http://localhost:5000/api/todo/${id}`;
+        
+                fetch(url,{
+                    method: 'delete'
+                })
+                .then(response => response.json())
+                .then(json =>{
+                    console.log(json)
+
+                    let dataUpdate = [];
+                    //this filters the whole data toremove the one that was just deleted
+                    data.map(task => {
+                        if(task.id !== id)
+                        {
+                            dataUpdate.push(task);
+                        }
+                    });
+                    // this is to call the method that sets the tasks to the dome to repass its data without the deleted one
+                    this.addDataToState(dataUpdate);
+                    Swal.fire({
+                        title: 'Deleted!',
+                        text: 'Your Task Has been deleted.',
+                        type: 'success'
+                    }) 
+                } 
+                ) 
+                .catch(error => { 
+                    console.log(error)
+                    Swal.fire(
+                        {
+                          type: 'error',
+                          title:'Sorry!!',
+                          text: 'Tasks cant be loaded please Check your internet Connection'
+                        }
+                      )
+                } );
+
+            }
+            else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled!!',
+                    'Your Task is safe.',
+                    'error'
+                  )
+            }
+          }
+        )
+
+    }
+    //This is to Acccept a task (it is working )
+    handleAcceptedClick(e,id){
+        Swal.fire({
+            title:` Are you sure?`,
+            text: 'You Want To Accept This Task!',
             type: 'warning',
             showCancelButton: true,
             confirmButtonText: 'Yes, Accept!',
@@ -273,22 +283,20 @@ class Dashboard extends React.Component{
           })
           .then((result) => {
             if (result.value) {
-                let pending = this.state.pending;
-                let url = `http://localhost:5000/api/todo/${id}`;
+                let url = `http://localhost:5000/api/todo/accepttask/${id}`;
         
                 fetch(url,{
                     method: 'Put'
                 })
                 .then(response => response.json())
                 .then(json => {
-                        console.log(json);
+                        console.log(json, `This is the json respone`);
                         Swal.fire({
                             title: 'Accepted!',
                             text: 'Your Task is Currently Ongoing.',
                             type: 'success'
                         }) 
-                        let accepted = pending.filter(task => task.id !== id);
-                        this.setState({pending:accepted});
+                        this.addDataToState(json);
                     }
                 ) 
                 .catch(error => { 
@@ -309,21 +317,60 @@ class Dashboard extends React.Component{
                 Swal.fire(
                     'Cancelled',
                     'Your Task is still Pending ',
-                    'error'
+                    'info'
                   )
             }
           }
         )
     }
+
+    //This is to decline a task(ITS NOT WORKING)
     handleDeclinedClick = (e,id) =>{
         Swal.fire({
-            title: 'Declined!',
-            text: 'Your Task Has Been Declined Successfully.',
-            type: 'success'
-        }) 
-        let pending = this.state.pending;
-        let declined = pending.filter(task => task.id != id);
-        this.setState({pending:declined});
+            title:` Are you sure?`,
+            text: 'You Want To Accept This Task!',
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, Accept!',
+            cancelButtonText: 'No, keep it!'
+          })
+          .then((result) => {
+            if (result.value) {
+                let url = `http://localhost:5000/api/todo/declinetask/${id}`;
+        
+                fetch(url,{
+                    method: 'Put'
+                })
+                .then(response => response.json())
+                .then(json => {
+                        console.log(json, `This is the json respone`);
+                        Swal.fire({
+                            title: 'Declined!',
+                            text: 'Your Task Has Been Declined Successfully.',
+                            type: 'success'
+                        }) 
+                        this.addDataToState(json);
+                    }
+                )
+                .catch(error => { 
+                    console.log(error)
+                    Swal.fire(
+                        {
+                          type: `error`,
+                          title:`Opps!!`,
+                          text: `This Task Can't Be Acceptedd Please Check Your Internet Connection`
+                        }
+                      )
+                } )
+            }
+            else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                    'Cancelled',
+                    'Your Task is still Pending ',
+                    'info'
+                  )
+            }
+        });
     }
 
 
@@ -332,8 +379,8 @@ class Dashboard extends React.Component{
 
     render(){
 
-
-        let data = this.state.data;
+        // console.log(this.state.pending, `this is the rendered pending`)
+        
         let workunscheduled = this.state.workunscheduled;
         let schoolunscheduled = this.state.schoolunscheduled;
         let chillingunscheduled = this.state.chillingunscheduled;
@@ -350,7 +397,7 @@ class Dashboard extends React.Component{
         date = `${this.daySetter(date.getDay())}, ${this.monthSetter(date.getMonth())} ${date.getDate()}`;
 
 
-        console.log(workunscheduled,schoolunscheduled, chillingunscheduled,pending);
+        // console.log(workunscheduled,schoolunscheduled, chillingunscheduled,pending);
 
         let unwork =  workunscheduled.map(task => 
             {
@@ -466,10 +513,10 @@ class Dashboard extends React.Component{
                         <div class="todo-task">
                             <span contenteditable="true">{task.name}</span>
                             <div class="todo-task-buttons">
-                                <a class="badge badge-success" href="#" onClick={(e,id = pending.id) => this.handleAcceptedClick(e,id)}>
+                                <a class="badge badge-success" href="#" onClick={(e,id = task.id) => this.handleAcceptedClick(e,id)}>
                                     Accept
                                 </a>
-                                <a class="badge badge-warning" href="#"  onClick={(e,id = pending.id) => this.handleDeclinedClick(e,id)}>
+                                <a class="badge badge-warning" href="#"  onClick={(e,id = task.id) => this.handleDeclinedClick(e,id)}>
                                     Decline
                                 </a>
                                 <a class="task-btn-delete" onClick={(e,id = task.id) => this.handleClick(e,id)} >
