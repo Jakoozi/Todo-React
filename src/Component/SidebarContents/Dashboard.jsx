@@ -59,7 +59,8 @@ class Dashboard extends React.Component{
 
     //this method Gets all the Tasks from the data base and sends it to the addDataToState method(IT IS WORKING)
     componentDidMount(){
-        let url = 'http://localhost:5000/api/todo';
+        let id = Number(window.localStorage.getItem('userid'));
+        let url = `http://localhost:5000/api/todo/getByUserId/${id}`;
 
             fetch(url)
             .then(response => response.json())
@@ -74,6 +75,8 @@ class Dashboard extends React.Component{
                     }
                   )
             } );  
+            
+            console.log(id, "id is console logged here")
     }
 
 

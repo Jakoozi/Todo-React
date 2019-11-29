@@ -17,6 +17,7 @@ export default class Login extends Component {
         disablebtn: false
     }
 
+    //this method stores the form inputs value in the state
     handleInputChange = (e) =>{
         let name = e.target.name;
         let value = e.target.value;
@@ -24,11 +25,26 @@ export default class Login extends Component {
         data[name] = value;
 
         this.setState({data});
-        console.log(this.state);
+        // console.log(this.state);
        
 
     }
 
+//this method stores the userid in the browser
+    storeUserId = (jsonresponse) =>{
+        if (typeof(Storage) !== "undefined") {
+            // Code for localStorage
+            window.localStorage.setItem('userid', JSON.stringify(jsonresponse));
+
+
+
+            console.log(jsonresponse, "json response is console logged here")
+            
+            return(this.setState({login: true}))
+           
+        }
+      
+    }
     onSubmit = (e) => {
          
         e.preventDefault();
@@ -37,10 +53,8 @@ export default class Login extends Component {
         const {email, password} = this.state.data;
         if(email  && password )
         {
-           console.log("this is the new console")
             const data = JSON.stringify(this.state.data);
             let url = 'http://localhost:5000/api/admin/login';
-            console.log(data, "console oging data");
 
             fetch(url,{
                 method: 'post',
@@ -51,11 +65,11 @@ export default class Login extends Component {
             })
             .then(response => response.json())
             .then(json => {
-              console.log(json, "this is where json is console logged");
-                if(json == 1){
-                    return(this.setState({login: true}))
+                //checking for json's value from my database
+                if(Number.isInteger(json) ){
+                    this.storeUserId(json); 
                 }
-                else if(json == 2){
+                else if(json == false){
                     Swal.fire(
                         {
                         type: 'warning',
@@ -64,7 +78,7 @@ export default class Login extends Component {
                         }
                     )
                 }
-                else if(json == 3) {
+                else if(json == true) {
                     Swal.fire(
                         {
                         type: 'warning',
@@ -105,9 +119,9 @@ export default class Login extends Component {
         const {email, password,} = this.state.data;
         const {disablebtn} = this.state;
 
-        console.log(disablebtn)
         if (this.state.login){
             this.props.history.push('/Dashboard')
+            console.log(this.state.login, "Login is console logged here")
         }
 
         return (
@@ -180,63 +194,3 @@ export default class Login extends Component {
     }
 }
 
-
-{/* <div className='with-content-panel'>
-                <div className='all-wrapper menu-side with-side-panel'>
-                    <div className='layout-w'>
-                        <div className='content-w '>
-                            <div
-                            className='with-content-panel'
-                            style={{ minHeight: '95vh' }}>
-                                <nav class="navbar navbar-inverse">
-                                    <div class="container-fluid">
-                                        <div class="navbar-header">
-                                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-                                            <span class="icon-bar"></span>
-                                            <span class="icon-bar"></span>
-                                            <span class="icon-bar"></span>                        
-                                        </button>
-                                        <a class="navbar-brand" href="#">Logo</a>
-                                        </div>
-                                        <div class="collapse navbar-collapse" id="myNavbar">
-                                        <ul class="nav navbar-nav">
-                                            <li class="active"><a href="#">Home</a></li>
-                                            <li><a href="#">About</a></li>
-                                            <li><a href="#">Projects</a></li>
-                                            <li><a href="#">Contact</a></li>
-                                        </ul>
-                                        <ul class="nav navbar-nav navbar-right">
-                                            <li><a href="#"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
-                                        </ul>
-                                        </div>
-                                    </div>
-                                </nav>
-                                <div className="container-fluid">
-                                    <div className="row">
-                                        <div className="col-md-4">
-                                        </div>
-                                        <div className="col-md-4">
-                                            <form role="form">
-                                                <div class="form-group">
-                                                    <label for="email">Email address:</label>
-                                                    <input type="email" class="form-control" id="email" />
-                                                </div>
-                                                <div class="form-group">
-                                                    <label for="pwd">Password:</label>
-                                                    <input type="password" class="form-control" id="pwd" />
-                                                </div>
-                                                <div class="checkbox">
-                                                    <label><input type="checkbox" /> Remember me</label>
-                                                </div>
-                                                <button type="submit" class="btn btn-default">Submit</button>
-                                            </form>
-                                        </div>
-                                        <div className="col-md-4">
-                                        </div>
-                                    </div> 
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div> 
-</div> */}
