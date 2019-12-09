@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import Layout from '../Layout/Layout';
+import Moment from 'react-moment'
 import Swal from 'sweetalert2';
-import {Accept, dataReciever} from './Accept';
+import _ from 'lodash';
+import chunk from 'lodash/chunk';
+
 
 
 export default class Notification extends Component {
@@ -23,7 +26,8 @@ export default class Notification extends Component {
     }
 
     componentDidMount(){
-        let url = 'http://localhost:5000/api/todo';
+        let id = Number(window.localStorage.getItem("userid"));
+        let url = `http://localhost:5000/api/todo/getByUserId/${id}`;
     
             fetch(url)
             .then(response => response.json())
@@ -42,13 +46,13 @@ export default class Notification extends Component {
     }
 
     addDataToState = (data) => {
-
         let pendingtasks = [];
         let completedtasks = [];
         let skippedtasks = []
 
+
+        _.reverse(data)
         this.setState({data});
-        console.log(this.state.data, `state's data in the addDataToState method`);
 
         this.state.data.map(task => 
             {
@@ -67,9 +71,10 @@ export default class Notification extends Component {
                 
             }
         )
+        let pendingNotificationSetter = pendingtasks.length;
+        window.localStorage.setItem('pendingtasks', pendingNotificationSetter.toString());
 
         this.setState({pending:pendingtasks, completed:completedtasks, skipped:skippedtasks, loaded:true});
-        console.log(this.state);
     }
 
     handleskipClick = (e,id) => {
@@ -93,7 +98,7 @@ export default class Notification extends Component {
                 })
                 .then(response => response.json())
                 .then(json => {
-                        console.log(json);
+                        // console.log(json);
                         Swal.fire({
                             title: 'Deleted!',
                             text: 'Your Task has been deleted.',
@@ -148,7 +153,7 @@ export default class Notification extends Component {
                 })
                 .then(response => response.json())
                 .then(json => {
-                        console.log(json);
+                        // console.log(json);
                         Swal.fire({
                             title: 'Deleted!',
                             text: 'Your Task has been deleted.',
@@ -201,7 +206,7 @@ export default class Notification extends Component {
                 })
                 .then(response => response.json())
                 .then(json => {
-                        console.log(json, `This is the json respone`);
+                        // console.log(json, `This is the json respone`);
                         Swal.fire({
                             title: 'Accepted!',
                             text: 'Your Task is Currently Ongoing.',
@@ -253,7 +258,7 @@ export default class Notification extends Component {
                 })
                 .then(response => response.json())
                 .then(json => {
-                        console.log(json, `This is the json respone`);
+                        // console.log(json, `This is the json respone`);
                         Swal.fire({
                             title: 'Declined!',
                             text: 'Your Task Has Been Declined Successfully.',
@@ -282,6 +287,26 @@ export default class Notification extends Component {
             }
         });
     }
+    categoryReturnMethod = (category) =>{
+        switch (category) {
+            case 1:
+              category = `School`;
+              break;
+            case 2:
+              category = `Liesure`;
+              break;
+            case 3:
+              category = `Work`;
+              break;
+          }
+        //   console.log(category, 'category is console logged ')
+          return category;
+    }
+    timeFormater = (date) =>{
+        let formatedDate = date;
+        return <Moment format="ddd MMM Do, YYYY HH:mm">{formatedDate}</Moment>
+
+    }
 
 
     render() {
@@ -300,9 +325,9 @@ export default class Notification extends Component {
                                 <tbody>
                                     <tr role="row" class="odd">
                                         <td class="sorting_1">{pending.name}</td>
-                                        <td>{pending.category}</td>
-                                        <td>{pending.startTime}</td>                 
-                                        <td>{pending.endTime}</td>
+                                        <td>{this.categoryReturnMethod(pending.category)}</td>
+                                        <td>{this.timeFormater(pending.startTime)}</td>                 
+                                        <td>{this.timeFormater(pending.endTime)}</td>
                                         <td>
                                             <a class="badge badge-success" href="#" onClick={(e,id = pending.id) => this.handleAcceptedClick(e,id)}>
                                                 Accept
@@ -315,7 +340,7 @@ export default class Notification extends Component {
                                 </tbody>
                 );
             });
-            console.log(pend);
+            // console.log(pend);
         }
         else
         {
@@ -329,9 +354,9 @@ export default class Notification extends Component {
                                 <tbody>
                                     <tr role="row" class="odd">
                                         <td class="sorting_1">{completed.name}</td>
-                                        <td>{completed.category}</td>
-                                        <td>{completed.startTime}</td>                 
-                                        <td>{completed.endTime}</td>
+                                        <td>{this.categoryReturnMethod(completed.category)}</td>
+                                        <td>{this.timeFormater(completed.startTime)}</td>                 
+                                        <td>{this.timeFormater(completed.endTime)}</td>
                                         <td onClick={(e,id = completed.id) => this.handlecompleteClick(e,id)}>
                                             <a class="badge badge-danger" href="#">
                                                 Delete
@@ -342,7 +367,7 @@ export default class Notification extends Component {
                                 </tbody>    
                 );
             });
-            console.log(complete);
+            // console.log(complete);
         }
         else
         {
@@ -357,9 +382,9 @@ export default class Notification extends Component {
                                 <tbody>
                                     <tr role="row" class="odd">
                                         <td>{skip.name}</td>
-                                        <td>{skip.category}</td>
-                                        <td>{skip.startTime}</td>                 
-                                        <td>{skip.endTime}</td>
+                                        <td>{this.categoryReturnMethod(skip.category)}</td>
+                                        <td>{this.timeFormater(skip.startTime)}</td>                 
+                                        <td>{this.timeFormater(skip.endTime)}</td>
                                         <td onClick={(e,id = skip.id) => this.handleskipClick(e,id)}>
                                             <a class="badge badge-danger" href="#">
                                                 Delete
@@ -371,7 +396,7 @@ export default class Notification extends Component {
                                 
                 );
             });
-            console.log(skip);
+            // console.log(skip);
         }
         else
         {

@@ -8,6 +8,8 @@ import About from './Component/SidebarContents/About';
 import Setting from './Component/SidebarContents/Settings/Setting';
 import Login from './HomePage/Login';
 import Register from './HomePage/RegisterPage';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
   return ( 
@@ -22,6 +24,7 @@ function App() {
             <Route exact path="/Notification" component={Notification} />
             <Route exact path="/About" component={About} />
             <Route exact path="/Setting" component={Setting} />
+           
           </Switch>
         </BrowserRouter>
     </div>

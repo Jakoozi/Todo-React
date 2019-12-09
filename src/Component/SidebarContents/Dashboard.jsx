@@ -3,6 +3,10 @@ import React from 'react';
 import Layout from '../Layout/Layout';
 import { Link } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import _ from 'lodash';
+
 
 
 class Dashboard extends React.Component{
@@ -61,6 +65,7 @@ class Dashboard extends React.Component{
     componentDidMount(){
         let id = Number(window.localStorage.getItem('userid'));
         let url = `http://localhost:5000/api/todo/getByUserId/${id}`;
+        // this.notifyMethod();
 
             fetch(url)
             .then(response => response.json())
@@ -76,12 +81,15 @@ class Dashboard extends React.Component{
                   )
             } );  
             
-            console.log(id, "id is console logged here")
+            
     }
 
 
     //this is the method that sets the state to display the tasks. (it is WORKING)
     addDataToState = (data) => {
+
+        _.reverse(data);
+
         this.setState({data,loaded:true});
         console.log(this.state.data, `this is the state in the addDataToState method`);
 
@@ -114,6 +122,7 @@ class Dashboard extends React.Component{
             else if(task.statusReturner === 3)
             {
                 pending.push(task);
+               
             }
             else if(task.statusReturner === 4)
             {
@@ -163,6 +172,9 @@ class Dashboard extends React.Component{
                 workscheduled.push(task);
             }
         });
+        //i set local storage to number of pending for the notification sake
+        let pendingNotificationSetter = pending.length;
+        window.localStorage.setItem('pendingtasks', pendingNotificationSetter.toString());
        
         let slicedpending = pending.slice(0,4);
         let slicedongoing = ongoing.slice(0,4);
@@ -232,7 +244,6 @@ class Dashboard extends React.Component{
                 })
                 .then(response => response.json())
                 .then(json =>{
-                    console.log(json)
 
                     let dataUpdate = [];
                     //this filters the whole data toremove the one that was just deleted
@@ -293,7 +304,6 @@ class Dashboard extends React.Component{
                 })
                 .then(response => response.json())
                 .then(json => {
-                        console.log(json, `This is the json respone`);
                         Swal.fire({
                             title: 'Accepted!',
                             text: 'Your Task is Currently Ongoing.',
@@ -346,7 +356,6 @@ class Dashboard extends React.Component{
                 })
                 .then(response => response.json())
                 .then(json => {
-                        console.log(json, `This is the json respone`);
                         Swal.fire({
                             title: 'Declined!',
                             text: 'Your Task Has Been Declined Successfully.',
@@ -375,12 +384,11 @@ class Dashboard extends React.Component{
             }
         });
     }
-
-
-
-
-
+    
+   
+     
     render(){
+        
 
         // console.log(this.state.pending, `this is the rendered pending`)
         
@@ -488,7 +496,7 @@ class Dashboard extends React.Component{
         let leisure =  chillingscheduled.map(task => 
             {
                 return(
-                    <li class="draggable-task success favorite">
+                    <li class="draggable-task success">
                         <div class="todo-task-drag drag-handle">
                             <i class="os-icon os-icon-hamburger-menu-2 drag-handle"></i>
                         </div>
@@ -573,7 +581,7 @@ class Dashboard extends React.Component{
         
         let skippedrender = skipped.map(task => {
                 return(
-                    <li class="draggable-task success favorite">
+                    <li class="draggable-task success ">
                         <div class="todo-task-drag drag-handle">
                             <i class="os-icon os-icon-hamburger-menu-2 drag-handle"></i>
                         </div>
@@ -597,6 +605,7 @@ class Dashboard extends React.Component{
 
         return(
             <Layout>
+                
                 <div class="content-i">
                     <div class="content-box"> 
                         <div class="todo-app-w">
@@ -613,7 +622,7 @@ class Dashboard extends React.Component{
                                                     <span>Work</span>
                                                 </li>
                                                 <li>
-                                                    <span>School</span>g
+                                                    <span>School</span>
                                                 </li>
                                                 <li>
                                                     <span>Leisure</span>
@@ -627,12 +636,13 @@ class Dashboard extends React.Component{
                                 {/*Sidebar Section 1 ends */}
                                 {/*Sidebar Section 2 starts */}
                                 <div class="todo-sidebar-section">
-                                    <h4 class="todo-sidebar-section-header">
+                                    <h4 class="todo-sidebar-section-header"  >
                                         <span>Completed Tasks</span>
                                         <a class="todo-sidebar-section-toggle" href="#">
                                             <i class="os-icon os-icon-ui-23"></i>
                                         </a>
                                     </h4>
+                                    {/* <button onClick={()=> this.notify()}>Notify !</button> */}
                                     <div class="todo-sidebar-section-contents">
                                         {
                                             <ul class="tasks-list">
@@ -789,9 +799,9 @@ class Dashboard extends React.Component{
                                     {/*Task Section 3 Starts */}
                                     <div class="tasks-section">
                                         <div class="tasks-header-w">
-                                            <a class="tasks-header-toggler" href="#">
+                                            {/* <a class="tasks-header-toggler" href="#">
                                                 <i class="os-icon os-icon-ui-23"></i>
-                                            </a>
+                                            </a> */}
                                             <h5 class="tasks-header">Ongoing Tasks</h5>
                                                 {/* <span class="tasks-sub-header">Tue, Sep 24th</span> */}
                                             <Link class="add-task-btn"  to="/Create" >
@@ -814,9 +824,9 @@ class Dashboard extends React.Component{
                                     {/*Task Section 4 Starts */}
                                     <div class="tasks-section">
                                         <div class="tasks-header-w">
-                                            <a class="tasks-header-toggler" href="#">
+                                            {/* <a class="tasks-header-toggler" href="#">
                                                 <i class="os-icon os-icon-ui-23"></i>
-                                            </a>
+                                            </a> */}
                                             <h5 class="tasks-header">Skipped Tasks</h5>
                                                 {/* <span class="tasks-sub-header">Tue, Sep 24th</span> */}
                                             <Link class="add-task-btn"  to="/Create" >

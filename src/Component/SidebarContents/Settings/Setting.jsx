@@ -11,7 +11,7 @@ export default class Setting extends Component {
                 <ul className="breadcrumb">
 
                     <li className="breadcrumb-item"><Link to="/Dashboard" >Dashboard</Link></li>
-                    <li className="breadcrumb-item"><Link to="/" >Login</Link></li>
+                    <li className="breadcrumb-item"><Link to="/" >Logout</Link></li>
                     <li className="breadcrumb-item"><Link to="/Register" >Register</Link></li>
                     {/* <li className="breadcrumb-item"><Link to="/Create" >Create</Link></li>
                     <li className="breadcrumb-item"><Link to="/View" >Tasks</Link></li>      */}

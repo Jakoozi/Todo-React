@@ -8,14 +8,15 @@ export default class Create extends Component {
       name: "",
       category: "",
       startTime: "",
-      endTime: ""
+      endTime: "",
+      userId: ""
     },
     btndisabled: false,
     success: false,
     failed: true,
     clearState: false
   };
-
+//i ant to check something
   handleInputChange = e => {
     let name = e.target.name;
     let value = e.target.value;
@@ -26,19 +27,27 @@ export default class Create extends Component {
     this.setState({ data });
   };
   onSubmit = e => {
-    this.setState({ btndisabled: true });
-    console.log(this.state);
+    let id = window.localStorage.getItem('userid');
+    console.log(id, "i console logged id");
+
+    // this.setState({ btndisabled: true });
+    
+
     let { name, category, startTime, endTime } = this.state.data;
     if (name && category && startTime && endTime) {
       if (endTime > startTime)
       {
         e.preventDefault();
-        const data = JSON.stringify(this.state.data);
+     
+        const data = this.state.data;
+        data.userId = id;
+        console.log(data, "data is logged in onSubmit")
+
         let url = `http://localhost:5000/api/todo`;
         console.log("this is before making api call");
         fetch(url, {
           method: "post",
-          body: data,
+          body: JSON.stringify(data),
           headers: {
             "Content-Type": "application/json"
           }

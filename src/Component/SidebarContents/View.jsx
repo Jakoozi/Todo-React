@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
 import Layout from '../Layout/Layout';
+import Moment from 'react-moment';
 import Swal from 'sweetalert2';
-
+import { userInfo } from 'os';
+import moment from 'moment';
+import _ from 'lodash';
+import chunk from 'lodash/chunk';
 
 export default class View extends Component {
 
@@ -15,7 +19,8 @@ export default class View extends Component {
     }
 
     componentDidMount(){
-        let url = 'http://localhost:5000/api/todo';
+        let id = Number(window.localStorage.getItem("userid"));
+        let url = `http://localhost:5000/api/todo/getByUserId/${id}`;
     
             fetch(url)
             .then(response => response.json())
@@ -34,6 +39,7 @@ export default class View extends Component {
     }
 
     addDataToState = (data) => {
+        _.reverse(data);
         this.setState({data,loaded:true});
     }
 
@@ -131,11 +137,18 @@ export default class View extends Component {
           }
           return category;
     }
+    timeFormater = (date) =>{
+        let formatedDate = date;
+        return <Moment format="ddd MMM Do, YYYY HH:mm">{formatedDate}</Moment>
+    }
 
     render() {
         let all;
         let data = this.state.data;
         let loaded = this.state.loaded;
+        // let now = moment('2019-11-26T10:00:00');
+        // console.log(now, 'moment is console looged')
+        // this.timeFormater("2019-11-26T10:00:00");
         if(loaded === true)
         {
             all = data.map(data => {
@@ -148,8 +161,8 @@ export default class View extends Component {
                                         <td class="sorting_1">{data.name}</td>
                                         <td>{this.statusReturnerMethod(data.statusReturner)}</td>
                                         <td>{this.categoryReturnMethod(data.category)}</td>
-                                        <td>{data.startTime}</td>                 
-                                        <td>{data.endTime}</td>
+                                        <td>{this.timeFormater(data.startTime)}</td>                 
+                                        <td>{this.timeFormater(data.endTime)}</td>
                                         <td onClick={(e,id = data.id) => this.handleClick(e,id)}>
                                             <a class="badge badge-danger" href="#">Delete<i class="os-icon os-icon-ui-15"></i></a>
                                         </td>
@@ -170,17 +183,18 @@ export default class View extends Component {
         return (
             <div>
                 <Layout>
-                    <div class="content-i">
-                        <div class="content-box">   
-                            <div class="element-wrapper">
+                    <div class="content-w">
+                        <div class="content-i">   
+                            <div class="content-box">
+                                <div class="element-wrapper">
                                 <h4 class="element-header">All Tasks</h4>
-                                <div class="element-box" key={data.id}>
-                                    <div class="table-responsive">
+                                    {/* <div class="table-responsive"> */}
                                         {/* <div id="dataTable1_wrapper" class="dataTables_wrapper container-fluid dt-bootstrap4"> */}
-                                            <div class="row">
-                                                <div class="col-sm-12">
+                                            {/* <div class="row"> */}
+                                                {/* <div class="col-sm-12"> */}
                                                 {/* id="dataTable1   this is the table id" */}
-                                                    <table  width="100%" class="table table-striped table-lightfont dataTable" role="grid" aria-describedby="dataTable1_info"  style={{width: '100%'}}>
+                                                    {/* <table  width="100%" class="table table-striped table-lightfont dataTable" role="grid" aria-describedby="dataTable1_info"  style={{width: '100%'}}> */}
+                                                    <table className="table table-padded">
                                                         <thead>
                                                                     <tr role="row">
                                                                         <th class="sorting_asc" tabindex="0" aria-controls="dataTable1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending"  style={{width: '280px'}}>
@@ -206,6 +220,7 @@ export default class View extends Component {
                                                         <tfoot>
                                                             <tr>
                                                                 <th rowspan="1" colspan="1">Task</th>
+                                                                <th rowspan="1" colspan="1">Status</th>
                                                                 <th rowspan="1" colspan="1">Category</th>
                                                                 <th rowspan="1" colspan="1">Start Date</th>
                                                                 <th rowspan="1" colspan="1">End Date</th>
@@ -216,10 +231,10 @@ export default class View extends Component {
                                                         {all}
                                                     </table>
                                                 </div>         
-                                           </div>
+                                           {/* </div> */}
                                          {/* </div> */}
-                                    </div>
-                                </div>
+                                    {/* </div> */}
+                                {/* </div> */}
                             </div>
                         </div>
                     </div>
@@ -229,59 +244,3 @@ export default class View extends Component {
     }
 }
     
-
-                                            // <div class="row">
-                                            //     <div class="col-sm-12 col-md-6">
-                                            //         <div class="dataTables_length" id="dataTable1_length">
-                                            //             <label>
-                                            //                 Show 
-                                            //                 <select name="dataTable1_length" aria-controls="dataTable1" class="form-control form-control-sm">
-                                            //                     <option value="10">10</option>
-                                            //                     <option value="25">25</option>
-                                            //                     <option value="50">50</option>
-                                            //                     <option value="100">100</option>
-                                            //                 </select>
-                                            //                 entries
-                                            //             </label>
-                                            //         </div>
-                                            //     </div>
-                                            //     <div class="col-sm-12 col-md-6">
-                                            //         <div id="dataTable1_filter" class="dataTables_filter">
-                                            //             <label>Search:
-                                            //                 <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="dataTable1" />
-                                            //             </label>
-                                            //         </div>
-                                            //     </div>
-                                            // </div>              
-
-                                            // <div class="row">
-                                            //    <div class="col-sm-12 col-md-5">
-                                            //         <div class="dataTables_info" id="dataTable1_info" role="status" aria-live="polite">    
-                                            //             Showing 1 to 10 of 57 entries
-                                            //         </div>
-                                            //     </div>
-                                            //     <div class="col-sm-12 col-md-7">
-                                            //         <div class="dataTables_paginate paging_simple_numbers" id="dataTable1_paginate">
-                                            //             <ul class="pagination">
-                                            //                 <li class="paginate_button page-item previous disabled" id="dataTable1_previous">
-                                            //                     <a href="#" aria-controls="dataTable1" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                                            //                 </li>
-                                            //                 <li class="paginate_button page-item active">
-                                            //                     <a href="#" aria-controls="dataTable1" data-dt-idx="1" tabindex="0" class="page-link">1</a>
-                                            //                 </li>
-                                            //                 <li class="paginate_button page-item ">
-                                            //                     <a href="#" aria-controls="dataTable1" data-dt-idx="2" tabindex="0" class="page-link">2</a>
-                                            //                 </li>
-                                            //                 <li class="paginate_button page-item ">
-                                            //                     <a href="#" aria-controls="dataTable1" data-dt-idx="3" tabindex="0" class="page-link">3</a>
-                                            //                 </li>
-                                            //                 <li class="paginate_button page-item ">
-                                            //                     <a href="#" aria-controls="dataTable1" data-dt-idx="4" tabindex="0" class="page-link">4</a>
-                                            //                 </li>
-                                            //                 <li class="paginate_button page-item ">
-                                            //                     <a href="#" aria-controls="dataTable1" data-dt-idx="5" tabindex="0" ////class="page-link">5</a>
-                                            //                 </li>
-                                            //             </ul>
-                                            //         </div>
-                                            //     </div>
-                                            // </div>
