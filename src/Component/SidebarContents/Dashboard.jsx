@@ -612,9 +612,6 @@ class Dashboard extends React.Component{
                             <div class="todo-sidebar">
                                 <div class="todo-sidebar-section">
                                         <h4 class="todo-sidebar-section-header">Task Category
-                                            <a to="/View" className="todo-sidebar-section-toggle">
-                                                <i class="os-icon os-icon-ui-23"></i>
-                                            </a>
                                         </h4>
                                         <div class="todo-sidebar-section-contents">
                                             <ul class="projects-list">
@@ -637,12 +634,8 @@ class Dashboard extends React.Component{
                                 {/*Sidebar Section 2 starts */}
                                 <div class="todo-sidebar-section">
                                     <h4 class="todo-sidebar-section-header"  >
-                                        <span>Completed Tasks</span>
-                                        <a class="todo-sidebar-section-toggle" href="#">
-                                            <i class="os-icon os-icon-ui-23"></i>
-                                        </a>
+                                        <span>COMPLETED TASKS</span>
                                     </h4>
-                                    {/* <button onClick={()=> this.notify()}>Notify !</button> */}
                                     <div class="todo-sidebar-section-contents">
                                         {
                                             <ul class="tasks-list">
@@ -655,10 +648,7 @@ class Dashboard extends React.Component{
                                 {/*side bar Section 3 begins*/ }
                                 <div class="todo-sidebar-section">
                                     <h4 class="todo-sidebar-section-header">
-                                        <span>Unscheduled Tasks</span>
-                                        <a class="todo-sidebar-section-toggle" href="#">
-                                            <i class="os-icon os-icon-ui-23"></i>
-                                        </a>
+                                        <span>UNSCHEDULED TASKS</span>
                                     </h4>
                                     <div class="todo-sidebar-section-contents">
                                         <div class="todo-sidebar-section-sub-section">
@@ -727,20 +717,17 @@ class Dashboard extends React.Component{
                                     <i class="os-icon os-icon-ui-83"></i>
                                     <span>Today's Tasks</span>
                                 </h4>
-                                <p class="tasks-sub-header">{date}</p>
+                                <h5 class="tasks-sub-header">{date}</h5>
                                 <div class="all-tasks-w">
                                     {/*Task Section 1 Starts*/}
                                     <div class="tasks-section">
                                         <div class="tasks-header-w">
-                                            <a class="tasks-header-toggler" href="#">
+                                            {/* <a class="tasks-header-toggler" href="#">
                                                 <i class="os-icon os-icon-ui-23"></i>
-                                            </a>
-                                            <h5 class="tasks-header">Due Tasks</h5>
-                                            {/* <i class="os-icon os-icon-fire fire"></i> */}
-                                           
-                                            {/* <span class="tasks-sub-header">Wed, Sep 25th</span> */}
+                                            </a> */}
+                                            <h5 class="tasks-header">PENDING TASKS</h5>
                                             <Link class="add-task-btn"  to="/Create" >
-                                                {/* <i class="os-icon os-icon-ui-22"></i> */}
+                                                <i class="os-icon os-icon-ui-22"></i>
                                                 <span>Add Task</span>
                                             </Link>
                                         </div>
@@ -761,10 +748,10 @@ class Dashboard extends React.Component{
                                     <div class="tasks-section">
                                         {/* <!--START - TASKS HEADER--> */}
                                         <div class="tasks-header-w">
-                                            <a class="tasks-header-toggler" href="#">
+                                            {/* <a class="tasks-header-toggler" href="#">
                                                 <i class="os-icon os-icon-ui-23"></i>
-                                            </a>
-                                            <h5 class="tasks-header">Scheduled Tasks</h5>
+                                            </a> */}
+                                            <h5 class="tasks-header">SCHEDULED TASKS</h5>
                                             <Link class="add-task-btn"  to="/Create" >
                                                 <i class="os-icon os-icon-ui-22"></i>
                                                 <span>Add Task</span>
@@ -785,7 +772,7 @@ class Dashboard extends React.Component{
                                                     {school}
                                                 </ul>
                                             }
-                                        <div class="tasks-list-header">Work</div>
+                                        <div class="tasks-list-header">Leisure</div>
                                             {
                                                 <ul class="tasks-list">
                                                     {leisure}
@@ -802,7 +789,7 @@ class Dashboard extends React.Component{
                                             {/* <a class="tasks-header-toggler" href="#">
                                                 <i class="os-icon os-icon-ui-23"></i>
                                             </a> */}
-                                            <h5 class="tasks-header">Ongoing Tasks</h5>
+                                            <h5 class="tasks-header">ONGOING TASKS</h5>
                                                 {/* <span class="tasks-sub-header">Tue, Sep 24th</span> */}
                                             <Link class="add-task-btn"  to="/Create" >
                                                 <i class="os-icon os-icon-ui-22"></i>
@@ -827,7 +814,7 @@ class Dashboard extends React.Component{
                                             {/* <a class="tasks-header-toggler" href="#">
                                                 <i class="os-icon os-icon-ui-23"></i>
                                             </a> */}
-                                            <h5 class="tasks-header">Skipped Tasks</h5>
+                                            <h5 class="tasks-header">SKIPPED TASKS</h5>
                                                 {/* <span class="tasks-sub-header">Tue, Sep 24th</span> */}
                                             <Link class="add-task-btn"  to="/Create" >
                                                 <i class="os-icon os-icon-ui-22"></i>

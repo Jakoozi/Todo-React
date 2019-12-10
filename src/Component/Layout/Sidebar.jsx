@@ -1,39 +1,50 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+// import Sound from "react-sound";
+import notificationsound from "../../sounds/rush.mp3";
 // import { css } from 'glamor';
 
 class SidebarComponent extends React.Component {
-
-  componentDidMount(){
+  componentDidMount() {
     this.notifyMethod();
+    this.sound = new Audio(notificationsound)
   }
+
+  playSound = () => {
+    if(this.notifierMethod() !== 0)
+    {
+      this.sound.play();
+    }
+    
+  }
+
   notifierMethod = () => {
     let notifier = Number(window.localStorage.getItem("pendingtasks"));
-
-    console.log(notifier, "Notifier is console logged here");
     return notifier;
-  }
-  notifyMethod = () =>{
-     let notify = this.notifierMethod();
-    if(notify == 0){
-      // return null;
-      return toast.info(`Hey!  You Have ${notify} Pending Tasks 😎😎 !`)
+  };
+
+  notifyMethod = () => {
+    let notify = this.notifierMethod();
+    if (notify == 0) {
+      return null;
+      // return toast.info(`Hey!  You Have ${notify} Pending Tasks 😎😎 !`);
+    } else {
+      return toast.warning(`Hey! You Have ${notify}  Pending Tasks 😎 !`, {
+        autoClose: 9000
+      });
     }
-    else{
-      return toast.info(`Hey! You Have ${notify}  Pending Tasks 😎 !`,
-        {
-          autoClose: 60000 
-        }
-      );
-    }
-  }
+  };
 
   render() {
+    
+    setInterval(()=>{
+      this.playSound();
+      console.log('sound suppose play now')
+    }, 6000)
 
     return (
-      
       <div className="menu-and-user">
         <ToastContainer />
         <div className="logged-user-w">
@@ -93,9 +104,12 @@ class SidebarComponent extends React.Component {
               <span>Settings</span>
             </Link>
           </li>
+
+          {/* <li>
+            <input type="text" onChange={(e)=>{this.setState({name:e.target.value})}}/>
+          </li> */}
         </ul>
       </div>
-      
     );
   }
 }
